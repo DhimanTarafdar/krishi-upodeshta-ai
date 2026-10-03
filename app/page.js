@@ -38,7 +38,7 @@ export default function Home() {
 
   const submit = async () => {
     setErr(""); setRes(null); setLoading(true);
-    outRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (window.innerWidth < 1000) outRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     try {
       const pos = useWx ? await getPosition() : null;
       const j = await api("/api/advice", { method: "POST", body: JSON.stringify({ image: image?.base64, mime: image?.mime, symptoms, uid, ...(pos || {}) }) });
@@ -66,7 +66,7 @@ export default function Home() {
           <ImageUploader image={image} onChange={setImage} />
           <label htmlFor="sym">কী সমস্যা দেখছেন?</label>
           <div className="chips">{QUICK.map((q) => <button key={q} onClick={() => setSymptoms((s) => (s ? s + ", " : "") + q)}>{q}</button>)}</div>
-          <textarea id="sym" ref={boxRef} rows={4} value={symptoms} maxLength={1000} onChange={(e) => setSymptoms(e.target.value)} placeholder="যেমন: ধানের পাতায় চোখের মতো দাগ, তিন দিন ধরে বাড়ছে" />
+          <textarea id="sym" ref={boxRef} rows={3} value={symptoms} maxLength={1000} onChange={(e) => setSymptoms(e.target.value)} placeholder="যেমন: ধানের পাতায় চোখের মতো দাগ, তিন দিন ধরে বাড়ছে" />
           <div className="row">
             <button className={`mic ${rec ? "on" : ""}`} onClick={listen}>{rec ? "শুনছি... থামাতে চাপুন" : "মুখে বলুন"}</button>
             <label className="chk"><input type="checkbox" checked={useWx} onChange={(e) => setUseWx(e.target.checked)} /> আবহাওয়া মিলিয়ে দেখুন</label>
